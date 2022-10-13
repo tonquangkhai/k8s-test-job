@@ -1,0 +1,124 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: paralleljobs.ibm.com
+  finalizers: []
+spec:
+  group: ibm.com
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+  scope: Namespaced
+  names:
+    plural: paralleljobs
+    singular: paralleljob
+    kind: ParallelJob
+    shortNames:
+    - pj
+  validation:
+    openAPIV3Schema:
+      type: object
+      properties:
+        spec:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            headerTask:
+              type: string
+            placement:
+              type: object
+              properties:
+                sameTerm:
+                  type: object
+                  properties:
+                    topologyKey:
+                      type: string
+                    topologyName:
+                      type: string
+                spanTerms:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      topologyKey:
+                        type: string
+                      taskTile:
+                        type: integer
+            mpiOptions:
+              type: object
+              properties:
+                containedUser:
+                  type: boolean
+                dnsDisable:
+                  type: boolean
+                enable:
+                  type: boolean
+                hostfileDisable:
+                  type: boolean
+                kubexecDisable:
+                  type: boolean
+                serviceDisable:
+                  type: boolean
+                waiterImage:
+                  type: string
+            priority:
+              type: integer
+            schedulerName:
+              type: string
+            taskGroups:
+              type: array
+              items:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                  spec:
+                    type: object
+                    properties:
+                      placement:
+                        type: object
+                        properties:
+                          sameTerm:
+                            type: object
+                            properties:
+                              topologyKey:
+                                type: string
+                              topologyName:
+                                type: string
+                          spanTerms:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                topologyKey:
+                                  type: string
+                                taskTile:
+                                  type: integer
+                      replicas:
+                        type: integer
+                      template:
+                        type: object
+                        properties:
+                          spec:
+                            type: object
+                            properties:
+                              nodeSelector:
+                                type: object
+                                properties:
+                                  beta.kubernetes.io:
+                                    type: string
+                                  beta.kubernetes.io/os:
+                                    type: string
+                              containers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    args:
